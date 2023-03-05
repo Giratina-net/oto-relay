@@ -1,0 +1,127 @@
+@use crate::{
+config::{Config, UrlKind},
+data::Node,
+templates::{info_html, instance_html, statics::index_css},
+};
+
+@(local: &[Node], nodes: &[Node], config: &Config)
+
+<!doctype html>
+<html>
+
+<head lang="en">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>音系ActivityPub Relay Service</title>
+  <link rel="stylesheet" href="/static/@index_css.name" type="text/css" />
+</head>
+
+<body>
+  <header>
+    <div class="header-text">
+      <h1>音Relay（仮）<span class="smaller"></span></h1>
+      <p>@Config::software_name() @Config::software_version()</p>
+    </div>
+  </header>
+  <main>
+    @if !local.is_empty() || config.local_blurb().is_some() {
+    <article>
+      <h3>概要</h3>
+      <section class="local-explainer">
+        @if let Some(blurb) = config.local_blurb() {
+        @blurb
+        } else {
+        <p>These domains are run by the same admins as this relay.</p>
+        }
+      </section>
+      @if !local.is_empty() {
+      <ul>
+        @for node in local {
+        @if let Some(inst) = node.instance.as_ref() {
+        <li>
+          @:instance_html(inst, node.info.as_ref().map(|info| { info.software.as_ref() }), node.contact.as_ref(),
+          &node.base)
+        </li>
+        } else {
+        @if let Some(inf) = node.info.as_ref() {
+        <li>
+          @:info_html(inf, &node.base)
+        </li>
+        }
+        }
+        }
+      </ul>
+      }
+    </article>
+    }
+    <article>
+      <h3>参加方法</h3>
+      <section class="joining">
+        @if config.restricted_mode() {
+        <h4>
+          新規加入受付中です！！！
+        </h4>
+        <p>
+          当リレーは承認制になりますが、音MADやニコメド等のコミュニティーの方々は基本的に受け入れる方針です。<br>
+          参加希望等ありましたら @Nyaanime@mstdn.giratina.net 又は twitter.com/SehataKuro までお申し付けください。
+        </p>
+        } else {
+        <p>
+          If you are the admin of a server that supports activitypub relays, you can add
+          this relay to your server.
+        </p>
+        }
+        <h4>Mastodon</h4>
+        <p>
+          Mastodon鯖の管理者の方は、以下のURLをリレーに追加してください。
+        <pre>@config.generate_url(UrlKind::Inbox)</pre>
+        </p>
+        <h4>Pleroma</h4>
+        <p>
+          Pleroma鯖の管理者の方は、以下のURLをリレーに追加してください。
+        <pre>@config.generate_url(UrlKind::Actor)</pre>
+        </p>
+      </section>
+    </article>
+    <article>
+      <h3></h3>
+        <h4>
+          
+        </h4>
+        <p>
+      </section>
+    </article>
+    @if !nodes.is_empty() {
+    <article>
+      <h3>@nodes.len() 接続中のサーバー</h3>
+      <ul>
+        @for node in nodes {
+        @if let Some(inst) = node.instance.as_ref() {
+        <li>
+          @:instance_html(inst, node.info.as_ref().map(|info| { info.software.as_ref() }), node.contact.as_ref(),
+          &node.base)
+        </li>
+        } else {
+        @if let Some(inf) = node.info.as_ref() {
+        <li>
+          @:info_html(inf, &node.base)
+        </li>
+        }
+        }
+        }
+      </ul>
+    </article>
+    }
+  </main>
+  <footer>
+    @if let Some(blurb) = config.footer_blurb() {
+    <div>@blurb</div>
+    }
+    <p>
+      このasonixさんの管理してるAodeRelayは以下のソースコードから閲覧できます！！！<br>
+      <a href="@config.source_code()">@config.source_code()</a>
+    </p>
+  </footer>
+</body>
+
+</html>
