@@ -9,7 +9,7 @@ templates::{info_html, instance_html, statics::index_css},
 <!doctype html>
 <html>
 
-<head lang="en">
+<html lang="ja">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>音系ActivityPub Relay Service</title>
@@ -62,16 +62,19 @@ templates::{info_html, instance_html, statics::index_css},
           新規加入受付中です！！！
         </h4>
         <p>
-          当リレーは承認制になりますが、音MADやニコメド等のコミュニティーの方々は基本的に受け入れる方針です。<br>
-          参加希望等ありましたら Nyaanime mstdn.giratina.net 又は twitter.com/SehataKuro までお申し付けください。
-        </p>
+          当リレーは承認制になりますが、コミュニティーの方々は積極的に受け入れる方針です。<br>
+          参加希望や問題等ありましたら<br>
+          [AT]Nyaanime[AT]mstdn.giratina.net<br>
+          twitter.com/SehataKuro<br>
+          瀬畑黒#9999<br> 
+          までお申し付けください。</p>
         } else {
         <p>
           If you are the admin of a server that supports activitypub relays, you can add
           this relay to your server.
         </p>
         }
-        <h4>Mastodon鯖の管理者の方は、以下のURLをリレーに追加してください。</h4>
+        <h4>MisskeyやMastodon鯖の管理者の方は、以下のURLをリレーに追加してください。</h4>
         <p>
         <pre>@config.generate_url(UrlKind::Inbox)</pre>
         </p>
@@ -84,12 +87,14 @@ templates::{info_html, instance_html, statics::index_css},
     <article>
       <h3>謝辞</h3>
       <section class="joining">
-        <p>AodeRelayの開発者のasonixさん、ytpmv.infoのサブドメイン割り当てをして頂いたmaimaiさん、ありがとうございます。</p>
+        <p>AodeRelayの開発者のasonixさん<br>
+          ytpmv.infoのサブドメイン割り当てをして頂いたmaimaiさん<br>
+          ありがとうございます。</p>
       </section>
     </article>
     @if !nodes.is_empty() {
     <article>
-      <h3>@nodes.len() 接続中のサーバー</h3>
+      <h3>@nodes.len() つの接続中のサーバー</h3>
       <ul>
         @for node in nodes {
         @if let Some(inst) = node.instance.as_ref() {
@@ -110,12 +115,9 @@ templates::{info_html, instance_html, statics::index_css},
     }
   </main>
   <footer>
-    @if let Some(blurb) = config.footer_blurb() {
-    <div>@blurb</div>
-    }
-    <p>
-      このasonixさんの管理してるAodeRelayは以下のソースコードから閲覧できます！！！<br>
-      <a href="https://git.asonix.dog/asonix/relay/">asonix/relay</a>
+      <p>
+      asonixさんの管理してるAodeRelayのソースコードは以下から閲覧できます！！！<br>
+      <a href="https://git.asonix.dog/asonix/relay/">git.asonix.dog/asonix/relay</a>
     </p>
   </footer>
 </body>
